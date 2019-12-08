@@ -1,0 +1,49 @@
+# This is for testing images in local
+
+version: "3"
+services:
+  postgres:
+    image: "postgres:latest"
+  redis:
+    image: "redis:latest"
+  # nginx:
+  #   restart: always
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./nginx
+  #   ports:
+  #     - "3050:80"
+  api:
+    depends_on:
+      - postgres
+    build:
+      dockerfile: Dockerfile
+      context: ./server
+    # volumes:
+    #   - /opt/app/node_modules
+    #   - ./server:/opt/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGDATABASE=postgres
+      - PGPASSWORD=postgres_password
+      - PGPORT=5432
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+    # volumes:
+    #   - /opt/app/node_modules
+    #   - ./client:/opt/app
+  worker:
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    build:
+      dockerfile: Dockerfile
+      context: ./worker
+    # volumes:
+    #   - /opt/app/node_modules
+    #   - ./worker:/opt/app

@@ -17,7 +17,7 @@ before_install:
   # Install kubectl
   - gcloud components update kubectl
   # Login to googcle cloud
-  - gcloud auth activate-service-account --key-file service-account.json
+  - gcloud auth activate-service-account --key-file service_account.json
   # Set the project
   - gcloud config set project fibkube
   # Set the zone

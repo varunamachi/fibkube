@@ -1,18 +1,44 @@
 sudo: required
 services:
   - docker
-
-# Install Google Cloud SDK
+env:
+  global:
+    - SHA=$(git rev-parse HEAD)
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
-  - openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in service_account.json.enc -out /app/service_account.json -d
+  # Decrypt the GCP account file
+  - openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in service_account.json.enc -out service_account.json -d
+
+  # Install and integrate Google Cloud SDK
   - curl https://sdk.cloud.google.com | bash > /dev/null
   - source $HOME/google-cloud-sdk/path.bash.inc
+
+  # Configure workspace with Google account and cluster info
+  # Install kubectl
   - gcloud components update kubectl
+  # Login to googcle cloud
   - gcloud auth activate-service-account --key-file service-account.json
-# Configure SDK with Google Cloud account info
-# Login to Docker CLI
-# Perform test build
-# Run tests
-# Build images, tag them and push to docker hub
-# Apply config to k8s folder
-# Imperatively update the images in the cluster
+  # Set the project
+  - gcloud config set project fibkube
+  # Set the zone
+  - gcloud config set compute/zone asia-south1-a
+  # Login
+  - gcloud container clusters get-credentials fib-cluster
+
+  # Login to Docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+  # Perform test build
+  - docker build -t varunamachi/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  # Run tests
+  - docker run -e CI=true varunamachi/react-test npm test -- --coverage
+
+deploy:
+  provider: script
+  # Use a shell script to:
+  # Build images, tag them and push to docker hub
+  # Apply config to k8s folder
+  # Imperatively update the images in the cluster
+  script: bash ./deploy.sh

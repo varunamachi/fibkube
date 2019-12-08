@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: client
-          # image: varunamachi/multi-client
-          image: stephengrider/multi-client
+          image: varunamachi/fib-client
+          # image: stephengrider/multi-client
           ports:
             - containerPort: 3000

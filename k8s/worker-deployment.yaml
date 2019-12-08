@@ -14,10 +14,10 @@ spec:
     spec:
       containers:
         - name: worker
-          # image: varunamachi/multi-worker
-          image: stephengrider/multi-worker
+          image: varunamachi/fib-worker
+          # image: stephengrider/multi-worker
           env:
             - name: REDIS_HOST
               value: redis-cluster-ip-service
             - name: REDIS_PORT
-              value: '6379'
+              value: "6379"

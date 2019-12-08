@@ -14,15 +14,15 @@ spec:
     spec:
       containers:
         - name: server
-          # varunamachi/multi-server
-          image: stephengrider/multi-server
+          image: varunamachi/fib-server
+          # image: stephengrider/multi-server
           ports:
             - containerPort: 5000
           env:
             - name: REDIS_HOST
               value: redis
             - name: REDIS_PORT
-              value: '6379'
+              value: "6379"
             - name: PGUSER
               value: postgres
             - name: PGHOST
@@ -30,9 +30,9 @@ spec:
             - name: PGDATABASE
               value: postgres
             - name: PGPORT
-              value: '5432'
+              value: "5432"
             - name: PGPASSWORD
               valueFrom:
-                secretKeyRef: 
+                secretKeyRef:
                   name: pgpassword
-                  key: PGPASSWORD 
+                  key: PGPASSWORD

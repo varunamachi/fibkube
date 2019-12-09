@@ -1,0 +1,9 @@
+apiVersion: cert-manager.io/v1alpha
+kind: Certificate
+metadata:
+  name: reactkubetest-tk-tls
+spec:
+  secretName: reactkubetest-tk
+  issuerRef: letsencrypt-prod
+  kind: CluserIssuer
+commonName: reactkubetest.tk

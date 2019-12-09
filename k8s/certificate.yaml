@@ -1,9 +1,20 @@
-apiVersion: cert-manager.io/v1alpha
+apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   name: reactkubetest-tk-tls
 spec:
   secretName: reactkubetest-tk
-  issuerRef: letsencrypt-prod
-  kind: CluserIssuer
-commonName: reactkubetest.tk
+  issuerRef:
+    name: letsencrypt-prod
+    kind: CluserIssuer
+  commonName: reactkubetest.tk
+  dnsName:
+    - reactkubetest.tk
+    - www.reactkubetest.tk
+  acme:
+    config:
+      - http01:
+          ingressClass: nginx
+        domains:
+          - reactkubetest.tk
+          - www.reactkubetest.tk

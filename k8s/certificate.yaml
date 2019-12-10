@@ -6,7 +6,7 @@ spec:
   secretName: reactkubetest-tk
   issuerRef:
     name: letsencrypt-prod
-    kind: CluserIssuer
+    kind: ClusterIssuer
   commonName: reactkubetest.tk
   dnsName:
     - reactkubetest.tk
